@@ -1,8 +1,10 @@
 # virtual-hourglass
+
 A virtual hourglass built on an OLED QVGA 2.2 TFT SPI 240x320 and an Arduino Uno.
 
+# wiring
 
-
+(I used 2k transistors instead of 1K8 and 51 ohm resistor instead of 56)
 
 UNO +5V to display pin 1 (VCC)
 UNO +5V through a 56 Ohm resistor to display pin 8 (LED)
