@@ -1,4 +1,4 @@
-```
+
 #include <SPI.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_ILI9341.h>
@@ -16,6 +16,14 @@
 Adafruit_ILI9341 tft(TFT_CS, TFT_DC, TFT_RST);
 
 int16_t previousWidth[240];
+
+int sensorPin = 4;
+int sensorValue;
+int lastTiltState = LOW;
+
+long lastDebounceTIme = 0; // the last time the output pin was toggled
+long debounceDelay = 50; // the debounce time
+
 
 void drawHourglassFrame() {
   tft.drawLine(85, TOP_Y, 235, TOP_Y, ILI9341_WHITE);
@@ -134,21 +142,29 @@ void setup() {
   }
 
   drawHourglassFrame();
+
+  pinMode(sensorPin, INPUT);
+  digitalWrite(sensorPin, HIGH);
 }
 
-void loop() {
+void sandFlow() {
+    // updates to intial hourglass
   updateSand(100, 0, false);
 
+  // delay before sand falls
   delay(500);
 
+  // sand falling
   for (int amount = 100; amount >= 0; amount--) {
     updateSand(amount, 100 - amount, amount > 0);
 
     delay(80);
   }
 
+  // delay before flipping
   delay(1000);
 
+  // "flipping" animation
   tft.setTextColor(ILI9341_WHITE, ILI9341_BLACK);
   tft.setTextSize(2);
   tft.setCursor(112, 220);
@@ -158,4 +174,7 @@ void loop() {
 
   tft.fillRect(0, 218, 320, 22, ILI9341_BLACK);
 }
-```
+
+void loop() {
+  sandFlow();
+}
